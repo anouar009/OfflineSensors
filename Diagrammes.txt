@@ -92,3 +92,96 @@ note right of EDR_Team : Check Agent Status
 @enduml
 
 ************************
+@startuml
+actor User
+participant "EDR Team" as EDR
+participant "Cybereason Console" as Cybereason
+participant "Extract Folder" as ExtractFolder
+participant "Script" as Script
+participant "Result File" as ResultFile
+participant "Dashboard Excel" as Dashboard
+
+User -> EDR: Start of each month
+EDR -> Cybereason: Extract 'Stale' sensors
+Cybereason -> EDR: Provide extract files
+EDR -> ExtractFolder: Download and put files
+EDR -> Script: Run the script
+Script -> ResultFile: Generate result.csv
+EDR -> Dashboard: Load result into Excel
+EDR -> Dashboard: Apply VB script for formatting
+@enduml
+***********************************************@startuml
+|EDR Team|
+start
+:Start of each month;
+:Extract 'Stale' sensors from Cybereason;
+|Cybereason Console|
+:Provide extract files;
+|EDR Team|
+:Download relevant extract files (90 days);
+:Put files into extract folder;
+|SharePoint|
+:Retrieve extract files from SharePoint folder;
+|EDR Team|
+:Run the script;
+|Script|
+:Generate result.csv;
+|EDR Team|
+:Load result into 'Dashboard' Excel file;
+:Apply VB script for conditional formatting;
+stop
+@enduml@startuml
+|EDR Team|
+start
+:Start of each month;
+:Extract 'Stale' sensors from Cybereason;
+|Cybereason Console|
+:Provide extract files;
+|EDR Team|
+:Download relevant extract files (90 days);
+:Put files into extract folder;
+|SharePoint|
+:Retrieve extract files from SharePoint folder;
+|EDR Team|
+:Run the script;
+|Script|
+:Generate result.csv;
+|EDR Team|
+:Load result into 'Dashboard' Excel file;
+:Apply VB script for conditional formatting;
+stop
+@enduml
+**************
+@startuml
+package "System" {
+  [Cybereason Console]
+  [SharePoint]
+  [Script]
+  [Excel Dashboard]
+}
+
+[Cybereason Console] --> [Script] : Provide extract files
+[SharePoint] --> [Script] : Retrieve extract files
+[Script] --> [Excel Dashboard] : Generate result.csv
+@enduml
+***************************
+@startuml
+node "Analyst Machine" {
+  component "Script"
+  component "Excel Dashboard"
+}
+
+node "Cybereason Server" {
+  component "Cybereason Console"
+}
+
+node "SharePoint Server" {
+  component "SharePoint"
+}
+
+"Cybereason Console" --> "Script" : Provide Stale sensors
+"SharePoint" --> "Script" : Retrieve extract files
+"Script" --> "Excel Dashboard" : Generate result.csv
+@enduml
+**********
+
