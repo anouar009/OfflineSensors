@@ -1,0 +1,31 @@
+script VBA pour Excel qui applique une mise en forme conditionnelle à toutes les cellules en fonction de leur valeur :
+
+Sub ApplyConditionalFormatting()
+    Dim ws As Worksheet
+    Dim rng As Range
+    Dim cell As Range
+
+    ' Définir la feuille de calcul active
+    Set ws = ActiveSheet
+
+    ' Définir la plage de cellules à vérifier (ici, toute la feuille)
+    Set rng = ws.UsedRange
+
+    ' Boucle à travers chaque cellule de la plage
+    For Each cell In rng
+        If cell.Value = "Seen" Then
+            cell.Interior.Color = RGB(255, 0, 0) ' Rouge
+        ElseIf cell.Value = "NotSeen" Then
+            cell.Interior.Color = RGB(0, 255, 0) ' Vert
+        ElseIf cell.Value = "NotFound" Then
+            cell.Interior.Color = RGB(255, 255, 0) ' Jaune
+        End If
+    Next cell
+End Sub
+Pour utiliser ce script :
+
+Ouvrez Excel et appuyez sur Alt + F11 pour ouvrir l'éditeur VBA.
+Insérez un nouveau module en cliquant sur Insertion > Module.
+Copiez et collez le script ci-dessus dans le module.
+Fermez l'éditeur VBA et retournez dans Excel.
+Appuyez sur Alt + F8, sélectionnez ApplyConditionalFormatting, puis cliquez sur Exécuter.

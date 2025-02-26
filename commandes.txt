@@ -1,0 +1,10 @@
+git powershell
+& "C:\Users\Z694YT\OneDrive - AXA\Documents\Lab\PortableGit\cmd\git.exe" git config --global user.email "anouar.mechti@gmail.com"
+
+
+Set-Alias python "C:\Users\Z694YT\OneDrive - AXA\Documents\Lab\Winpython64-3.12.8.0dot\WPy64-31280\python\python.exe"
+
+
+
+
+python .\OfflineSensors.py

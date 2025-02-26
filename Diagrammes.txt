@@ -1,0 +1,94 @@
+@startuml data_preparation_comparison
+start
+
+:Read machines.csv;
+:List available extraction files from extracts_folder;
+note right: Extract filenames with dates
+
+:For each extraction file;
+repeat
+  :Read the extraction file;
+  :For each machine in machines.csv;
+  :Check if machine exists in extraction file;
+
+  if (Machine Found?) then (yes)
+    :Record Current Status;
+  else (no)
+    :Mark as NotFound;
+  endif
+
+repeat while (more extraction files?)
+
+:If extraction file not found;
+:Mark as FileAbsent;
+
+:Compile results into a summary table;
+:Save results to results.csv;
+
+stop
+@enduml
+**********************************************
+@startuml technical_environment
+package "Data Sources" {
+  [machines.csv] as machines
+  note right of machines : Contains the list\nof \nStale machines extract\nfrom Cybereason console
+  [EDR_Silent_Sensors_Reports] as extracts
+  note right of extracts : Folder containing several\ndaily extract files\nfrom Offline Sensors project
+}
+
+package "Processing" {
+  [Python Script] as script
+  note right of script : Processes daily extracts,\ncompares statuses, and\ncompiles results
+}
+
+package "Output" {
+  [results.csv] as results
+  note right of results : Contains compiled machine\nstatuses for each date
+}
+
+machines --> script : Read Machine Names\nand Stale Machines Data
+extracts --> script : Read Daily Extraction Files
+script --> results : Save Compiled Results
+
+@enduml
+*******************
+@startuml limitations_flowchart
+start
+
+:Extended Comparison Period;
+note right: Leads to more daily extracts
+
+:Increase in Daily Extract Files;
+note right: More files to process
+
+:Higher Computational Requirements;
+note right: May exceed laptop capabilities
+
+:Large File Sizes;
+note right: Slow processing or failures
+
+if (Is processing feasible?) then (yes)
+  :Proceed with Comparison;
+else (no)
+  :Consider Alternative Strategies;
+  note right: Using powerful systems
+endif
+
+stop
+@enduml
+******************
+@startuml sequence_diagram
+actor EDR_Team
+participant Cybereason
+participant Silva
+
+EDR_Team -> Cybereason : Request Data Extraction
+Cybereason -> EDR_Team : Provide Stale Machines Data
+
+EDR_Team -> Silva : Request Status Verification
+Silva -> EDR_Team : Provide Agent Status
+
+note right of EDR_Team : Check Agent Status
+@enduml
+
+************************

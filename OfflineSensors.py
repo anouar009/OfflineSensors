@@ -17,14 +17,19 @@ print(f"{len(machines)} machines lues.")
 results_dict = {machine: {} for machine in machines}
 
 # 4. Comparaison des Statuts
+# Vérifier le chemin du dossier d'extraction
+print(f"Chemin du dossier d'extraction: {os.path.abspath(extracts_folder)}")
+
 # Lister les Fichiers d'Extraction à chaque itération pour s'assurer qu'ils sont à jour
 extract_files = [f for f in os.listdir(extracts_folder) if f.endswith('.csv')]
+print(f"Fichiers trouvés : {extract_files}")
+
 dates = []
 for file in extract_files:
-    date_str = file.split('_')[-1].split('.')[0]  # MM-DD-YYYY
+    date_str = file.split('_')[-1].split('.')[0]  # DD-MM-YYYY
     try:
-        date = datetime.strptime(date_str, '%m-%d-%Y').date()
-        dates.append(date.strftime('%m-%d-%Y'))  # Conserver le format MM-DD-YYYY
+        date = datetime.strptime(date_str, '%d-%m-%Y').date()
+        dates.append(date.strftime('%d-%m-%Y'))  # Conserver le format DD-MM-YYYY
     except ValueError:
         continue  # Ignore les fichiers qui ne correspondent pas au format
 
@@ -40,7 +45,6 @@ for date in sorted(dates):
         print(f"Lecture du fichier: {file_path}...")
         try:
             extract_df = pd.read_csv(file_path)
-            # Parcourir les machines
             for machine in machines:
                 if machine in extract_df['Machinename'].values:
                     status = extract_df.loc[extract_df['Machinename'] == machine, 'Current Status'].values[0]
